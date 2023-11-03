@@ -2,7 +2,7 @@
 <html lang="zh-cn">
   <head>
     <meta charset="UTF-8" />
-    <title>1_props的基本使用</title>
+    <title>2_props的限制</title>
   </head>
   <body>
     <!-- 准备一个容器 -->
@@ -16,6 +16,8 @@
     <script src="../js/react-dom.development.js"></script>
     <!-- 引入babel，用于将jsx转为js -->
     <script src="../js/babel.min.js"></script>
+    <!-- 引入prop-types 用于限制props的类型 -->
+    <script src="../js/prop-types.js"></script>
 
     <!-- 引入组件 -->
     <script type="text/babel">
@@ -23,6 +25,7 @@
       class Person extends React.Component {
         render() {
           const { name, age, sex } = this.props;
+          // this.props.name = "Jack"; // 不能修改props中的数据 因为props中的数据是只读的
           return (
             <ul>
               <li>姓名: {name}</li>
@@ -33,13 +36,28 @@
         }
       }
 
+      // 限制props的类型
+      Person.propTypes = {
+        name: PropTypes.string.isRequired, // 必传 且为字符串
+        age: PropTypes.number, // 为数字
+        sex: PropTypes.string, // 为字符串
+        speak: PropTypes.func, // 为函数
+      };
+
+      // 设置默认值
+      Person.defaultProps = {
+        sex: "未知", // 如果没有传递sex属性，那么sex的默认值为"未知"
+        age: 0, // 如果没有传递age属性，那么age的默认值为0
+      };
+
+      function speak() {
+        console.log("你好啊");
+      }
+
       // 2. 渲染组件到页面
+      ReactDOM.render(<Person name="Tom" />, document.getElementById("test1"));
       ReactDOM.render(
-        <Person name="Tom" age={18} sex="男" />,
-        document.getElementById("test1")
-      );
-      ReactDOM.render(
-        <Person name="Jerry" age={19} sex="女" />,
+        <Person name="Jerry" age={19} sex="女" speak={speak} />,
         document.getElementById("test2")
       );
       const p = { name: "Jack", age: 18, sex: "男" };

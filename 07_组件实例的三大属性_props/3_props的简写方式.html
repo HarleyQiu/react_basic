@@ -2,7 +2,7 @@
 <html lang="zh-cn">
   <head>
     <meta charset="UTF-8" />
-    <title>1_props的基本使用</title>
+    <title>3_props的简写方式</title>
   </head>
   <body>
     <!-- 准备一个容器 -->
@@ -16,6 +16,8 @@
     <script src="../js/react-dom.development.js"></script>
     <!-- 引入babel，用于将jsx转为js -->
     <script src="../js/babel.min.js"></script>
+    <!-- 引入prop-types 用于限制props的类型 -->
+    <script src="../js/prop-types.js"></script>
 
     <!-- 引入组件 -->
     <script type="text/babel">
@@ -31,17 +33,34 @@
             </ul>
           );
         }
+
+        // 限制props的类型
+        static propTypes = {
+          name: PropTypes.string.isRequired,
+          age: PropTypes.number,
+          sex: PropTypes.string,
+          speak: PropTypes.func,
+        };
+
+        // 设置默认值
+        static defaultProps = {
+          sex: "未知",
+          age: 0,
+        };
+      }
+
+      function speak() {
+        console.log("你好啊");
       }
 
       // 2. 渲染组件到页面
+      ReactDOM.render(<Person name="Tom" />, document.getElementById("test1"));
+
       ReactDOM.render(
-        <Person name="Tom" age={18} sex="男" />,
-        document.getElementById("test1")
-      );
-      ReactDOM.render(
-        <Person name="Jerry" age={19} sex="女" />,
+        <Person name="Jerry" age={19} sex="女" speak={speak} />,
         document.getElementById("test2")
       );
+
       const p = { name: "Jack", age: 18, sex: "男" };
       ReactDOM.render(<Person {...p} />, document.getElementById("test3"));
     </script>
