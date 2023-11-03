@@ -17,11 +17,25 @@
 
     <!-- 引入组件 -->
     <script type="text/babel">
+      // 1. 创建组件
       class Weather extends React.Component {
-        constructor() {}
+        constructor(props) {
+          super(props);
+          this.state = { isHot: false, wind: "微风" };
+          this.changeWeather = this.changeWeather.bind(this); // 绑定方法
+        }
         render() {
-          console.log(this);
-          return <h1>今天天气很炎热</h1>;
+          const { isHot, wind } = this.state;
+          return (
+            <h1 onClick={this.changeWeather}>
+              今天天气很{isHot ? "炎热" : "凉爽"}, {wind}
+            </h1>
+          );
+        }
+        changeWeather() {
+          const isHot = this.state.isHot;
+          this.setState({ isHot: !isHot });
+          console.log(this.state.isHot);
         }
       }
       // 2. 渲染组件到页面
