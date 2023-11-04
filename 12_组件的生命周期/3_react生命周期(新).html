@@ -7,12 +7,13 @@
 <body>
 <div id="test"></div>
 <!-- 引入react核心库 -->
-<script src="../js/react.development.js"></script>
+<script src="../js/17/react.development.js"></script>
 <!-- 引入react-dom，用于支持react操作DOM -->
-<script src="../js/react-dom.development.js"></script>
+<script src="../js/17/react-dom.development.js"></script>
 <!-- 引入babel，用于将jsx转为js -->
-<script src="../js/babel.min.js"></script>
+<script src="../js/17/babel.min.js"></script>
 <script type="text/babel">
+
     class Count extends React.Component {
         // 构造器
         constructor(props) {
@@ -38,9 +39,17 @@
             this.forceUpdate()
         }
 
-        // 组件将要挂载
-        componentWillMount() {
-            console.log('Count---componentWillMount')
+        // 如果取值都从props中取
+        static getDerivedStateFromProps(nextProps, prevState) {
+            console.log('Count---getDerivedStateFromProps')
+            console.log(nextProps, prevState)
+            return null
+        }
+
+        getSnapshotBeforeUpdate(prevProps, prevState) {
+            console.log('Count---getSnapshotBeforeUpdate')
+            console.log(prevProps, prevState)
+            return 'QiuLin-hao'
         }
 
         // 组件挂载完毕
@@ -66,15 +75,9 @@
             return true
         }
 
-        /**
-         * 组件将要更新
-         * @param nextProps 下一个属性对象
-         * @param nextState 下一个状态对象
-         * @param nextContext 下一个上下文对象
-         */
-        componentWillUpdate(nextProps, nextState, nextContext) {
-            console.log('Count---componentWillUpdate')
-            console.log(nextProps, nextState, nextContext)
+        componentDidUpdate(prevProps, prevState, snapshot) {
+            console.log('Count---componentDidUpdate')
+            console.log(prevProps, prevState, snapshot)
         }
 
         // render 用于渲染当前组件对应的虚拟DOM元素
@@ -92,62 +95,9 @@
         }
     }
 
-    class App extends React.Component {
-        constructor(props) {
-            super(props);
-            this.state = {
-                isShow: true,
-                carName: '奔驰c63'
-            }
-        }
-
-        changeCar = () => {
-            this.setState({carName: '迈巴赫'})
-        }
-
-        render() {
-            return (
-                <div>
-                    <h1>我是App组件</h1>
-                    <button onClick={this.changeCar}>点我换车</button>
-                    <B carName={this.state.carName}/>
-                </div>
-            );
-        }
-    }
-
-    class B extends React.Component {
-
-        componentWillMount() {
-            console.log('B---componentWillMount')
-        }
-
-        componentWillReceiveProps(nextProps, nextContext) {
-            console.log('B---componentWillReceiveProps')
-            console.log(nextProps, nextContext)
-        }
-
-        shouldComponentUpdate(nextProps, nextState, nextContext) {
-            console.log('B---shouldComponentUpdate')
-            console.log(nextProps, nextState, nextContext)
-            return true
-        }
-
-        render() {
-            const {carName} = this.props
-            return (
-                <div>
-                    <h1>我是B组件</h1>
-                    <h4>我接到的车是：{carName}</h4>
-                </div>
-            );
-        }
-    }
-
 
     ReactDOM.render(
-        <App/>
-        , document.getElementById('test'))
+        <Count count={199}/>, document.getElementById('test'))
 </script>
 </body>
 </html>
